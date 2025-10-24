@@ -4,6 +4,7 @@ import { Server } from "socket.io";
 import cors from "cors";
 import dotenv from "dotenv";
 import { pool } from "./persistence/db.js";
+import { initSocket } from "./socket/socketServer.js";
 
 dotenv.config();
 
@@ -32,6 +33,8 @@ io.on("connection", (socket) => {
     console.log("Client disconnected:", socket.id);
   });
 });
+initSocket(io);
+
 
 const PORT = process.env.PORT || 8080;
 server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
