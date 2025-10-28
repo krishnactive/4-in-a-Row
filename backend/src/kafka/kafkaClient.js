@@ -1,18 +1,16 @@
 import { Kafka } from "kafkajs";
+import dotenv from "dotenv";
+dotenv.config();
 
-export const kafka = new Kafka({
-  clientId: "fourinarow-backend",
-  brokers: ["localhost:9092"], //same as your docker-compose setup
+const kafka = new Kafka({
+  clientId: process.env.KAFKA_CLIENT_ID || "fourinarow-backend",
+  brokers: (process.env.KAFKA_BROKER || "localhost:9092").split(","),
+  ssl: true,
+  sasl: {
+    mechanism: process.env.KAFKA_SASL_MECHANISM || "SCRAM-SHA-256",
+    username: process.env.KAFKA_USERNAME,
+    password: process.env.KAFKA_PASSWORD,
+  },
 });
 
-export const kafkaProducer = kafka.producer();
-export const kafkaConsumer = kafka.consumer({ groupId: "analytics-group" });
-
-export const connectKafka = async () => {
-  try {
-    await kafkaProducer.connect();
-    console.log("Kafka Producer connected");
-  } catch (err) {
-    console.error("Kafka connection failed:", err.message);
-  }
-};
+export default kafka;

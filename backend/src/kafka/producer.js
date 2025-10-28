@@ -1,16 +1,6 @@
-import { Kafka } from "kafkajs";
-import dotenv from "dotenv";
-dotenv.config();
+import kafka from "./kafkaClient.js";
 
-const BROKERS = (process.env.KAFKA_BROKER || "localhost:9092").split(",");
-const CLIENT_ID = process.env.KAFKA_CLIENT_ID || "fourinarow-backend";
 const TOPIC = process.env.KAFKA_TOPIC || "game-events";
-
-const kafka = new Kafka({
-  clientId: CLIENT_ID,
-  brokers: BROKERS,
-});
-
 const producer = kafka.producer();
 let connected = false;
 
@@ -21,26 +11,32 @@ export async function startProducer() {
     connected = true;
     console.log("Kafka producer connected");
   } catch (err) {
-    console.error("Kafka producer connect error:", err?.message ?? err);
+    console.error("Kafka producer connection error:", err.message);
   }
 }
 
 export async function sendEvent(event) {
   try {
     if (!connected) await startProducer();
-    const msg = {...event,timestamp: event.timestamp||new Date().toISOString(),};
 
-    const key =event.gameId !== undefined && event.gameId !== null? String(event.gameId): null;
+    const message = {
+      ...event,
+      timestamp: event.timestamp || new Date().toISOString(),
+    };
+
+    const key =
+      event.gameId !== undefined && event.gameId !== null
+        ? String(event.gameId)
+        : null;
 
     await producer.send({
       topic: TOPIC,
-      messages: [
-        { key, value: JSON.stringify(msg) },
-      ],
+      messages: [{ key, value: JSON.stringify(message) }],
     });
+
+    console.log(`Kafka event sent: ${event.type || "unknown"}`);
   } catch (err) {
-    //loging error in kafaka
-    console.error("Kafka sendEvent error:", err?.message??err);
+    console.error("Kafka sendEvent error:", err.message);
   }
 }
 
@@ -51,6 +47,6 @@ export async function stopProducer() {
     connected = false;
     console.log("Kafka producer disconnected");
   } catch (err) {
-    console.error("Kafka stopProducer error:", err?.message ?? err);
+    console.error("Kafka producer disconnection error:", err.message);
   }
 }
