@@ -10,7 +10,7 @@ This project demonstrates scalable backend design, real-time gameplay, persisten
 | Layer | Platform | URL |
 |-------|-----------|-----|
 | **Frontend** | Vercel | [https://4-in-a-row-lovat.vercel.app/](https://4-in-a-row-lovat.vercel.app/) |
-| **Backend API** | Render | (Deployed Render URL here) |
+| **Backend API** | Render | [https://four-in-a-row-x2y5.onrender.com](https://four-in-a-row-x2y5.onrender.com) |
 | **Database** | Neon PostgreSQL | Cloud hosted |
 | **Kafka** | Redpanda Cloud | SASL_SSL secured |
 
@@ -42,7 +42,7 @@ The system supports **reconnections**, **leaderboard tracking**, and **Kafka-pow
 ### 1️⃣ Clone Repository
 
 ```bash
-git clone https://github.com/your-repo/4-in-a-row.git
+git clone https://github.com/krishnactive/4-in-a-row.git
 cd 4-in-a-row
 ```
 
@@ -69,6 +69,10 @@ KAFKA_PASSWORD=<your-kafka-password>
 KAFKA_SASL_MECHANISM=SCRAM-SHA-256
 KAFKA_SECURITY_PROTOCOL=SASL_SSL
 
+```
+Create `.env` in `/frontend`:
+```
+VITE_BACKEND_URL=http://localhost:5000
 ```
 
 ### 3️⃣ Start Services via Docker
