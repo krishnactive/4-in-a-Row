@@ -28,6 +28,13 @@ export const matchmakingHandler = async (io, socket, username) => {
       }
     }
 
+    if (waitingPlayer && waitingPlayer.username === username) {
+      console.log(`[Matchmaking] Ignoring self-match for ${username}`);
+      matchingLock.delete(username);
+      return;
+    }
+
+
     if (!waitingPlayer) {
       waitingPlayer = { socket, username };
 
