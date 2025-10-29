@@ -177,12 +177,17 @@ export const sessionManager = {
     clearTimeout(s.timer);
     s.socketId = socketId;
     s.isLoggedIn = true;
+    s.wasDisconnected = false;
     s.lastSeen = Date.now();
+
+    if (s.gameId) {
+      s.isInGame = true;
+    }
 
     try {
       await pool.query(
-        `UPDATE sessions SET connected=TRUE, socket_id=$2, last_seen=NOW() WHERE username=$1`,
-        [username, socketId]
+        `UPDATE sessions SET connected=TRUE, socket_id=$2, in_game=$3 ,last_seen=NOW() WHERE username=$1`,
+        [username, socketId, !!s.gameId]
       );
     } catch (err) {
       console.error("[SessionManager] reconnect DB error:", err.message);
