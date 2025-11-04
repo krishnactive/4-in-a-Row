@@ -2,6 +2,7 @@
 
 A full-stack **real-time multiplayer game** (Connect Four) built using **Node.js, React, Socket.IO, PostgreSQL, Docker, and Kafka (Redpanda)**.  
 This project demonstrates scalable backend design, real-time gameplay, persistent storage, and **decoupled analytics** using Kafka.
+[video]([Walk through](https://drive.google.com/file/d/1nvyh_dabH_IUHR-E_2mkc9swJgVs93hQ/view?usp=sharing))
 
 ---
 
